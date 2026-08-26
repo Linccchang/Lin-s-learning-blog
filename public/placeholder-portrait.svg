@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="399" height="499" fill="none" stroke="#dcd8cd"/>
+  <circle cx="200" cy="200" r="70" fill="none" stroke="#2f6b63" stroke-width="1.5"/>
+  <path d="M90 420 Q200 300 310 420" fill="none" stroke="#2f6b63" stroke-width="1.5"/>
+  <text x="200" y="470" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#5d6470">photo.jpg</text>
+</svg>

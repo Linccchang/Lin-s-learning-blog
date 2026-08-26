@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate, CATEGORY_CODE } from '../lib/format';
+
+const allPosts = (await getCollection('blog', ({ data }) => data.status === 'published')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const recentPosts = allPosts.slice(0, 3);
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const skills = [
+  'Python',
+  'PyTorch',
+  'LangChain',
+  'FastAPI',
+  'Docker',
+  'n8n',
+  'RAG',
+  'SQL',
+];
+---
+
+<BaseLayout title="learning/log — 個人技術筆記與作品集">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">AI × 自動化 · 碩士生的技術紀錄</p>
+      <h1>持續把學到的東西，寫成看得懂的紀錄。</h1>
+      <p class="lede">
+        這裡放我在 AI 與自動化領域的學習過程、實作專案，以及開發途中踩過的坑。
+        內容會隨著碩士這兩年持續累積，寫給未來的自己，也寫給任何想少走一點冤枉路的人。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/projects">看作品集</a>
+        <a class="btn btn-ghost" href="/blog">看所有文章</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>精選作品</h2>
+        <a class="more" href="/projects">所有作品 →</a>
+      </div>
+
+      {featuredProjects.length > 0 ? (
+        <div class="grid">
+          {featuredProjects.map((project) => (
+            <a class="card" href={`/projects/${project.id}`} style="text-decoration:none;">
+              <div class="card-top">
+                <h3>{project.data.name}</h3>
+                <span class="status" data-state={project.data.status}>{project.data.status}</span>
+              </div>
+              <p>{project.data.summary}</p>
+              <div class="tag-row">
+                {project.data.techStack.slice(0, 4).map((tech) => (
+                  <span class="tag">{tech}</span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty">還沒有精選作品，先去 /projects 補上第一個吧。</p>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>最新紀錄</h2>
+        <a class="more" href="/blog">所有文章 →</a>
+      </div>
+
+      {recentPosts.length > 0 ? (
+        <div class="log">
+          {recentPosts.map((post) => (
+            <div class="log-entry">
+              <div class="stamp">
+                <span>{formatDate(post.data.date)}</span>
+                <span class="cat">[{CATEGORY_CODE[post.data.category]}]</span>
+              </div>
+              <a class="title" href={`/blog/${post.id}`}>{post.data.title}</a>
+              <p class="desc">{post.data.summary}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="empty">還沒有文章，寫下第一篇吧。</p>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>技能</h2>
+      </div>
+      <div class="skills">
+        {skills.map((skill) => (
+          <span class="skill-pill">{skill}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

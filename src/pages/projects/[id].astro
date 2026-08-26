@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { formatDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${project.data.name} — learning/log`} description={project.data.summary}>
+  <div class="wrap">
+    <div style="padding-top: 32px;">
+      <a class="back-link" href="/projects">← 回作品集</a>
+    </div>
+  </div>
+
+  <header class="article-head">
+    <div class="wrap">
+      <p class="eyebrow">Project · {project.data.status}</p>
+      <h1>{project.data.name}</h1>
+      <div class="article-meta">
+        <span>{formatDate(project.data.date)}</span>
+        {project.data.techStack.map((tech) => <span class="tag">{tech}</span>)}
+      </div>
+      <div class="hero-actions" style="margin-top: 22px;">
+        {project.data.repoUrl && (
+          <a class="btn btn-ghost" href={project.data.repoUrl} target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+        )}
+        {project.data.demoUrl && (
+          <a class="btn btn-primary" href={project.data.demoUrl} target="_blank" rel="noopener noreferrer">Live Demo</a>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <div class="wrap">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

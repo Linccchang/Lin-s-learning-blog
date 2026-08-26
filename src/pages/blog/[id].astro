@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { formatDate, CATEGORY_CODE } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.status === 'published');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+// 只取 H2、H3 當大綱，避免大綱太細
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+// 側邊「更多文章」：同分類優先，其餘用最新的補滿，最多 5 篇，排除自己
+const allPosts = (await getCollection('blog', ({ data }) => data.status === 'published')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const others = allPosts.filter((p) => p.id !== post.id);
+const sameCategory = others.filter((p) => p.data.category === post.data.category);
+const rest = others.filter((p) => p.data.category !== post.data.category);
+const moreLikeThis = [...sameCategory, ...rest].slice(0, 5);
+---
+
+<BaseLayout title={`${post.data.title} — learning/log`} description={post.data.summary}>
+  <div class="wrap">
+    <div style="padding-top: 32px;">
+      <a class="back-link" href="/blog">← 回文章列表</a>
+    </div>
+  </div>
+
+  <header class="article-head">
+    <div class="wrap">
+      <p class="eyebrow">[{CATEGORY_CODE[post.data.category]}] {post.data.category}</p>
+      <h1>{post.data.title}</h1>
+      <div class="article-meta">
+        <span>{formatDate(post.data.date)}</span>
+        {post.data.series && <span>系列：{post.data.series}{post.data.day ? ` · Day ${post.data.day}` : ''}</span>}
+        {post.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap article-layout">
+    <article class="article-body">
+      <Content />
+
+      {post.data.ithomeUrl && (
+        <p style="margin-top: 2em;">
+          <a href={post.data.ithomeUrl} target="_blank" rel="noopener noreferrer">
+            這篇也同步發表在 iThome 鐵人賽 →
+          </a>
+        </p>
+      )}
+    </article>
+
+    <aside class="article-aside">
+      {tocHeadings.length > 0 && (
+        <div class="aside-box">
+          <p class="aside-title">本篇大綱</p>
+          <nav id="toc">
+            <ul>
+              {tocHeadings.map((h) => (
+                <li class={`toc-depth-${h.depth}`}>
+                  <a href={`#${h.slug}`} data-slug={h.slug}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
+
+      {moreLikeThis.length > 0 && (
+        <div class="aside-box">
+          <p class="aside-title">更多文章</p>
+          <ul class="more-list">
+            {moreLikeThis.map((p) => (
+              <li>
+                <a href={`/blog/${p.id}`}>{p.data.title}</a>
+                <span class="more-date">{formatDate(p.data.date)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  // 大綱捲動高亮（scroll spy）：捲到哪一段，左側大綱就跟著亮起來
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('#toc a');
+  if (tocLinks.length > 0) {
+    const targets = Array.from(tocLinks)
+      .map((link) => document.getElementById(link.dataset.slug ?? ''))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const setActive = (slug: string) => {
+      tocLinks.forEach((link) => {
+        link.classList.toggle('active', link.dataset.slug === slug);
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          const topMost = visible.reduce((a, b) => (a.boundingClientRect.top < b.boundingClientRect.top ? a : b));
+          setActive(topMost.target.id);
+        }
+      },
+      { rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+  }
+</script>

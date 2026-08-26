@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = (await getCollection('projects')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<BaseLayout title="作品集 — learning/log">
+  <section class="hero" style="padding-bottom: 40px;">
+    <div class="wrap">
+      <p class="eyebrow">Projects</p>
+      <h1>作品集</h1>
+      <p class="lede">AI 與自動化相關的專案，包含仍在開發中的版本。每個作品都附上原始碼與相關的開發筆記。</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 44px;">
+    <div class="wrap">
+      {allProjects.length > 0 ? (
+        <div class="grid">
+          {allProjects.map((project) => (
+            <div class="card">
+              <div class="card-top">
+                <h3><a href={`/projects/${project.id}`}>{project.data.name}</a></h3>
+                <span class="status" data-state={project.data.status}>{project.data.status}</span>
+              </div>
+              <p>{project.data.summary}</p>
+              <div class="tag-row">
+                {project.data.techStack.map((tech) => (
+                  <span class="tag">{tech}</span>
+                ))}
+              </div>
+              <div class="card-links">
+                <a href={`/projects/${project.id}`}>開發紀錄 →</a>
+                {project.data.repoUrl && <a href={project.data.repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>}
+                {project.data.demoUrl && <a href={project.data.demoUrl} target="_blank" rel="noopener noreferrer">Demo</a>}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="empty">還沒有作品。新增一個 .md 檔案到 src/content/projects 就會出現在這裡。</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>

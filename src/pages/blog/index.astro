@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate, CATEGORY_CODE } from '../../lib/format';
+
+const allPosts = (await getCollection('blog', ({ data }) => data.status === 'published')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const categories = ['全部', '學習紀錄', '專案開發紀錄', '技術文章', '鐵人賽系列'];
+---
+
+<BaseLayout title="文章 — learning/log">
+  <section class="hero" style="padding-bottom: 40px;">
+    <div class="wrap">
+      <p class="eyebrow">Blog</p>
+      <h1>文章與學習紀錄</h1>
+      <p class="lede">依時間排序，涵蓋技術文章、專案開發紀錄，以及每天隨手寫下的學習筆記。</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 44px;">
+    <div class="wrap">
+      <div class="filter-row">
+        {categories.map((c) => (
+          <span class="filter-pill" data-cat={c}>{c}</span>
+        ))}
+      </div>
+
+      {allPosts.length > 0 ? (
+        <div class="log" id="post-log">
+          {allPosts.map((post) => (
+            <div class="log-entry" data-category={post.data.category}>
+              <div class="stamp">
+                <span>{formatDate(post.data.date)}</span>
+                <span class="cat">[{CATEGORY_CODE[post.data.category]}]</span>
+                <span>{post.data.category}</span>
+              </div>
+              <a class="title" href={`/blog/${post.id}`}>{post.data.title}</a>
+              <p class="desc">{post.data.summary}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="empty">還沒有文章。新增一個 .md 檔案到 src/content/blog 就會出現在這裡。</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const pills = document.querySelectorAll<HTMLElement>('.filter-pill');
+  const entries = document.querySelectorAll<HTMLElement>('#post-log .log-entry');
+
+  pills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      pills.forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+      const cat = pill.dataset.cat;
+
+      entries.forEach((entry) => {
+        const show = cat === '全部' || entry.dataset.category === cat;
+        entry.style.display = show ? '' : 'none';
+      });
+    });
+  });
+
+  pills[0]?.classList.add('active');
+</script>

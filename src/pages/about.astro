@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const timeline = [
+  { when: '2025 — 至今', what: '資訊工程碩士生，研究方向為 AI 應用與流程自動化。' },
+  { when: '2025', what: '開始把學習與專案開發過程公開紀錄，累積技術文章與作品集。' },
+  { when: '2021 — 2025', what: '資訊工程學士，期間接觸資料分析、後端開發與機器學習基礎。' },
+];
+
+const skills = ['Python', 'PyTorch', 'LangChain', 'FastAPI', 'Docker', 'n8n', 'SQL', 'Git'];
+---
+
+<BaseLayout title="關於我 — learning/log" description="個人背景、技能與聯絡方式。">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1 style="font-size: 34px; margin-bottom: 20px;">關於我</h1>
+        <p>
+          我是一名資訊工程碩士生，目前專注在 AI 應用與自動化流程的研究與實作。
+          這個網站是我從碩士開始持續累積的紀錄：把學到的技術、做過的專案、
+          踩過的坑都寫下來，一方面方便自己日後回顧，一方面也希望能幫到路過的人。
+        </p>
+        <p>
+          比起「做出多厲害的東西」，我更在意能不能把思考與解決問題的過程講清楚——
+          這也是這個網站每篇文章都盡量附上開發歷程、而不只是成果展示的原因。
+        </p>
+
+        <h2 style="font-size: 20px; margin-top: 44px;">時間軸</h2>
+        <div>
+          {timeline.map((item) => (
+            <div class="timeline-item">
+              <span class="when">{item.when}</span>
+              <span>{item.what}</span>
+            </div>
+          ))}
+        </div>
+
+        <h2 style="font-size: 20px; margin-top: 44px;">技能</h2>
+        <div class="skills">
+          {skills.map((skill) => (
+            <span class="skill-pill">{skill}</span>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <img class="about-photo" src="/placeholder-portrait.svg" alt="個人照片預留位置" />
+
+        <div class="card" style="margin-top: 20px;">
+          <h3 style="font-size: 15px; font-family: var(--font-mono);">聯絡方式</h3>
+          <div class="contact-list">
+            <a href="mailto:you@example.com">✉ you@example.com</a>
+            <a href="https://github.com/yourname" target="_blank" rel="noopener noreferrer">↗ GitHub</a>
+            <a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noopener noreferrer">↗ LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 16px;">
+          <h3 style="font-size: 15px; font-family: var(--font-mono);">履歷</h3>
+          <p style="font-size: 14px; color: var(--graphite); margin: 0 0 12px;">
+            完整履歷（PDF）之後會放在這裡。
+          </p>
+          <a class="btn btn-ghost" href="/resume.pdf">下載履歷（尚未上傳）</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
