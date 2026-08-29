@@ -1,5 +1,5 @@
 ---
-title: 打造這個網站的過程與決策
+title: 打造個人部落格的過程與決策
 date: 2026-08-25
 category: 學習紀錄
 tags: [Astro, Markdown, 網站架構]
