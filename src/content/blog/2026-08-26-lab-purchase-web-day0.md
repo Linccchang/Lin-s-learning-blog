@@ -6,7 +6,9 @@ tags: [Claude, Next.js,Supabase]
 summary: 用Claude AI跟我ㄧ起打造一個採購管理網頁
 status: published
 ---
-## 開始前先說明，我是用Claude AI協作，利用AI幫我打造一個系統。
+## 前情提要及說明
+
+我是用Claude AI協作，利用AI幫我打造一個系統。
 
 此系列文章的技術層面都是利用AI完成，我只負責執行與提供作品框架，以此希望記錄下自己開發時遇到的困難與成果
 
