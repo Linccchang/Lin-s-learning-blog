@@ -1,4 +1,11 @@
-# Day 1：資料庫設計與商品管理頁面開發
+---
+title: Day 1：資料庫設計與商品管理頁面開發
+date: 2026-08-27
+category: 專案開發紀錄
+tags: [Claude, Next.js,Supabase]
+summary: 建立採購流程、設計資料庫
+status: published
+---
 
 ## 今日目標
 
