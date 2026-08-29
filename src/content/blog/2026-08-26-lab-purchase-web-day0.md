@@ -68,4 +68,4 @@ flowchart TD
 
 ---
 
-📌 下一篇：[Day 1：資料庫設計與商品管理頁面開發](#)
+📌 下一篇：[Day 1：資料庫設計與商品管理頁面開發]((https://lin-s-learning-blog-2j6y-five.vercel.app/blog/2026-08-27-day1-design-database)
