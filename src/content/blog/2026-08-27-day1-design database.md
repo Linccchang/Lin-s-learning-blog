@@ -113,4 +113,4 @@ const filteredProducts = keyword
 
 ---
 
-📌 下一篇：[Day 2：實機連線排錯、身份驗證與部署上線](#)
+📌 下一篇：[Day 2：實機連線排錯、身份驗證與部署上線](https://lin-s-learning-blog-2j6y-five.vercel.app/blog/2026-08-28-day2-upload-to-vercel)
