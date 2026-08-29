@@ -6,6 +6,11 @@ tags: [Claude, Next.js,Supabase]
 summary: 建立採購流程、設計資料庫
 status: published
 ---
+## 前情提要&說明
+
+我是用Claude AI協作，利用AI幫我打造一個系統。
+
+此系列文章的技術層面都是利用AI完成，我只負責執行與提供作品框架，以此希望記錄下自己開發時遇到的困難與成果
 
 ## 今日目標
 
