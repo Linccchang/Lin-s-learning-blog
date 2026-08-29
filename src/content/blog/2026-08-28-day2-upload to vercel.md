@@ -1,9 +1,9 @@
 ---
-title: Day 1：資料庫設計與商品管理頁面開發
-date: 2026-08-27
+title: Day 2：實機連線排錯、身份驗證與部署上線
+date: 2026-08-28
 category: 專案開發紀錄
 tags: [Claude, Next.js,Supabase]
-summary: 建立採購流程、設計資料庫
+summary: 連結supabase專案、網頁部屬到vercel、建立前端使用者登入系統
 status: published
 ---
 ## 前情提要&說明
@@ -11,8 +11,6 @@ status: published
 我是用Claude AI協作，利用AI幫我打造一個系統。
 
 此系列文章的技術層面都是利用AI完成，我只負責執行與提供作品框架，以此希望記錄下自己開發時遇到的困難與成果
-
-# Day 2：實機連線排錯、身份驗證與部署上線
 
 ## 今日目標
 
